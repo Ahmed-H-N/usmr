@@ -40,6 +40,31 @@ knitr::include_graphics("images/categorical/freshrmd2.png")
 ```
 `r qend()`
 
+:::frame
+### What does the code-chunk do?
+
+In a sense, this code-chunk does *nothing*:  It won't give you any output when you run it.  What it is actually doing, though, is defining a *function* called `dice()`.  If you look at your *environment* panel (top right), you'll see `dice` appear when you run the code.
+
+To produce some output, we have to *call* the function `dice()` (by writing it into code:  `dice(4)`, for example).  `dice()` wants to be supplied with some information (in the *argument* `num`).  If no information is supplied, num will take a *default value* of `1`.  (So writing `dice()` is equivalent to writing `dice(1)`).
+
+What does `dice()` do with `num`?  It calls another function, `sample()`, with *3* arguments.  We didn't write `sample()`:  it's a function that's "supplied with" R.  To find out more about what `sample()` does:
+
+* click inside the brackets just after `sample()` in your RMarkdown document (not this document; the one in RStudio);
+
+* press `TAB` (`⇥`), then `F1`
+
+* you should see some help appear in the bottom right-hand panel of RStudio.
+
+You will find that "`sample()` takes a sample ... from the elements of `x` ..."  If you compare the code in RStudio to the code under "Usage" you'll see that where the help has `x`, we have `1:6`.  So what does `1:6` mean?  One way to find out is to open the *console* in RStudio (bottom left) and just type stuff in.  What happens when you type `1:6`?  What about `2:17`?  (What about `6:1`?)
+
+The console is the place to "try stuff out" (don't worry, you can't break it).  What you should have found out is that `1:6` creates a *vector* (list of similar things, in this case numbers) of the numbers 1-6.
+
+Next, `num` maps to `size`: Looking through the help, `size` is the number of items to choose.  So `sample(1:6, 1)` would choose one number from the numbers 1-6 at random; `sample(1:6, 3)` would choose 3, and so on.  The last argument, `replace=TRUE`, tells `sample()` what to do with a number once it's been picked:  Does it go 'back into the bag' to be picked again (`TRUE`) or not? (`FALSE`)?
+
+Putting it all together, our `dice()` function "throws a die `num` times" by `sample()`ing from the numbers 1-6 `num` times, `replace`ing each number when it's been picked.
+:::
+
+
 `r qbegin(2)`
 Roll the dice 100 times.  
 Store the results in an object in your environment.  

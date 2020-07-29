@@ -13,6 +13,7 @@
 
 <title>Categorical Distributions</title>
 
+<script src="site_libs/header-attrs-2.3/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -425,6 +426,21 @@ Question 1
 <p class="question-end">
 </p>
 </div>
+<div id="what-does-the-code-chunk-do" class="section level3 frame">
+<h3>What does the code-chunk do?</h3>
+<p>In a sense, this code-chunk does <em>nothing</em>: It won’t give you any output when you run it. What it is actually doing, though, is defining a <em>function</em> called <code>dice()</code>. If you look at your <em>environment</em> panel (top right), you’ll see <code>dice</code> appear when you run the code.</p>
+<p>To produce some output, we have to <em>call</em> the function <code>dice()</code> (by writing it into code: <code>dice(4)</code>, for example). <code>dice()</code> wants to be supplied with some information (in the <em>argument</em> <code>num</code>). If no information is supplied, num will take a <em>default value</em> of <code>1</code>. (So writing <code>dice()</code> is equivalent to writing <code>dice(1)</code>).</p>
+<p>What does <code>dice()</code> do with <code>num</code>? It calls another function, <code>sample()</code>, with <em>3</em> arguments. We didn’t write <code>sample()</code>: it’s a function that’s “supplied with” R. To find out more about what <code>sample()</code> does:</p>
+<ul>
+<li><p>click inside the brackets just after <code>sample()</code> in your RMarkdown document (not this document; the one in RStudio);</p></li>
+<li><p>press <code>TAB</code> (<code>⇥</code>), then <code>F1</code></p></li>
+<li><p>you should see some help appear in the bottom right-hand panel of RStudio.</p></li>
+</ul>
+<p>You will find that “<code>sample()</code> takes a sample … from the elements of <code>x</code> …” If you compare the code in RStudio to the code under “Usage” you’ll see that where the help has <code>x</code>, we have <code>1:6</code>. So what does <code>1:6</code> mean? One way to find out is to open the <em>console</em> in RStudio (bottom left) and just type stuff in. What happens when you type <code>1:6</code>? What about <code>2:17</code>? (What about <code>6:1</code>?)</p>
+<p>The console is the place to “try stuff out” (don’t worry, you can’t break it). What you should have found out is that <code>1:6</code> creates a <em>vector</em> (list of similar things, in this case numbers) of the numbers 1-6.</p>
+<p>Next, <code>num</code> maps to <code>size</code>: Looking through the help, <code>size</code> is the number of items to choose. So <code>sample(1:6, 1)</code> would choose one number from the numbers 1-6 at random; <code>sample(1:6, 3)</code> would choose 3, and so on. The last argument, <code>replace=TRUE</code>, tells <code>sample()</code> what to do with a number once it’s been picked: Does it go ‘back into the bag’ to be picked again (<code>TRUE</code>) or not? (<code>FALSE</code>)?</p>
+<p>Putting it all together, our <code>dice()</code> function “throws a die <code>num</code> times” by <code>sample()</code>ing from the numbers 1-6 <code>num</code> times, <code>replace</code>ing each number when it’s been picked.</p>
+</div>
 <div class="question-begin">
 Question 2
 </div>
@@ -444,7 +460,7 @@ Solution 2
 <pre class="r"><code>table(roll100)</code></pre>
 <pre><code>## roll100
 ##  1  2  3  4  5  6 
-## 14 15 13 16 20 22</code></pre>
+## 18 15 18 19 16 14</code></pre>
 <p>Which we can then pass to the <code>barplot()</code> function:</p>
 <pre class="r"><code>barplot(table(roll100))</code></pre>
 <p><img src="01_categorical_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
@@ -558,8 +574,16 @@ Solution 6
 <p>Now that we’ve played with a toy example for a bit, we’re going to read in some data, and look at some of the variables</p>
 <p>Let’s read some data into R.
 First we’ll load the <strong>tidyverse</strong> package, so that we can use the <code>read_csv()</code> function.</p>
-<pre class="r"><code>library(tidyverse)
-starwars2 &lt;- read_csv(&quot;https://uoepsy.github.io/data/starwars2.csv&quot;)</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
+## ✓ tibble  3.0.3     ✓ dplyr   1.0.0
+## ✓ tidyr   1.1.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>starwars2 &lt;- read_csv(&quot;https://uoepsy.github.io/data/starwars2.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
 ## cols(
 ##   name = col_character(),
@@ -725,9 +749,9 @@ starwars2[1:6, ]</code></pre>
 <pre class="r"><code>1:6</code></pre>
 <pre><code>## [1] 1 2 3 4 5 6</code></pre>
 <div class="optional-begin">
-Extra: Combining $ and []<span id="opt-start-8" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-8&#39;, &#39;opt-start-8&#39;)"></span>
+Extra: Combining $ and []<span id="opt-start-6" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-6&#39;, &#39;opt-start-6&#39;)"></span>
 </div>
-<div id="opt-body-8" class="optional-body" style="display: none;">
+<div id="opt-body-6" class="optional-body" style="display: none;">
 <p>We can use the two accessors in combination:</p>
 <pre class="r"><code># extract the variable called &quot;name&quot; and show the 20th entry 
 starwars2$name[20]</code></pre>
@@ -822,9 +846,9 @@ starwars2[starwars2$species == &quot;Droid&quot;, ]</code></pre>
 ## 1 R2-D2     96 &lt;NA&gt;       red       Naboo     Droid  
 ## 2 R5-D4     97 &lt;NA&gt;       red       Tatooine  Droid</code></pre>
 <div class="optional-begin">
-Optional<span id="opt-start-9" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-9&#39;, &#39;opt-start-9&#39;)"></span>
+Optional<span id="opt-start-7" class="fa fa-plus optional-icon clickable" onclick="toggle_visibility(&#39;opt-body-7&#39;, &#39;opt-start-7&#39;)"></span>
 </div>
-<div id="opt-body-9" class="optional-body" style="display: none;">
+<div id="opt-body-7" class="optional-body" style="display: none;">
 <p>A useful function is <code>with()</code>. This creates a “container” where the variables of the dataframe are available to R within the <code>with()</code> parentheses without the need to use <code>$</code>:</p>
 <pre class="r"><code>with(starwars2, starwars2[species == &quot;Droid&quot;, ])</code></pre>
 <pre><code>## # A tibble: 2 x 6
@@ -1401,7 +1425,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
